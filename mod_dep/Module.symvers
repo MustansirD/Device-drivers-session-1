@@ -1,0 +1,3 @@
+0xf68966ba	print_hello	/home/spanpunelt25/session1/mod_dep/module1	EXPORT_SYMBOL
+0x412bf961	add_two_numbers	/home/spanpunelt25/session1/mod_dep/module1	EXPORT_SYMBOL
+0x810d3a2f	GLOBAL_VARIABLE	/home/spanpunelt25/session1/mod_dep/module1	EXPORT_SYMBOL

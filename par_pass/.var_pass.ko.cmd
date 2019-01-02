@@ -1,0 +1,1 @@
+cmd_/home/spanpunelt25/session1/par_pass/var_pass.ko := ld -r -m elf_x86_64  -z max-page-size=0x200000 -T ./scripts/module-common.lds --build-id  -o /home/spanpunelt25/session1/par_pass/var_pass.ko /home/spanpunelt25/session1/par_pass/var_pass.o /home/spanpunelt25/session1/par_pass/var_pass.mod.o

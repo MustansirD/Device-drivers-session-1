@@ -1,0 +1,26 @@
+panpunelt13@spanpunelt13-VirtualBox:~/session1/hello_world$ make
+make	-C	/lib/modules/4.15.0-36-generic/build	M=/home/spanpunelt13/session1/hello_world	modules
+make[1]: Entering directory '/usr/src/linux-headers-4.15.0-36-generic'
+  CC [M]  /home/spanpunelt13/session1/hello_world/ex01.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC      /home/spanpunelt13/session1/hello_world/ex01.mod.o
+  LD [M]  /home/spanpunelt13/session1/hello_world/ex01.ko
+make[1]: Leaving directory '/usr/src/linux-headers-4.15.0-36-generic'
+
+
+
+Oct  8 16:14:40 spanpunelt13-VirtualBox kernel: [17659.852128]  paramTest2=899
+Oct  8 16:14:54 spanpunelt13-VirtualBox kernel: [17674.056249] In the exit function
+Oct  8 16:17:02 spanpunelt13-VirtualBox CRON[10279]: (root) CMD (   cd / && run-parts --report /etc/cron.hourly)
+Oct  8 16:32:38 spanpunelt13-VirtualBox kernel: [18716.078345] In the init function
+Oct  8 16:32:38 spanpunelt13-VirtualBox kernel: [18737.449069] In the exit function
+Oct  8 16:35:45 spanpunelt13-VirtualBox systemd-timesyncd[320]: Timed out waiting for reply from 91.189.89.199:123 (ntp.ubuntu.com).
+Oct  8 16:35:47 spanpunelt13-VirtualBox kernel: [18926.987752] In the init function of ex01.c file
+Oct  8 16:35:56 spanpunelt13-VirtualBox systemd-timesyncd[320]: Timed out waiting for reply from 91.189.94.4:123 (ntp.ubuntu.com).
+Oct  8 16:36:04 spanpunelt13-VirtualBox kernel: [18943.736957] In the exit function of ex01.c file
+Oct  8 16:36:06 spanpunelt13-VirtualBox systemd-timesyncd[320]: Timed out waiting for reply from 91.189.91.157:123 (ntp.ubuntu.com).
+Oct  8 17:06:07 spanpunelt13-VirtualBox kernel: [20746.908543] In the init function of ex01.c file
+Oct  8 17:06:25 spanpunelt13-VirtualBox kernel: [20764.233137] In the exit function of ex01.c file
+
+

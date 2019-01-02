@@ -1,0 +1,122 @@
+//------------Output of modinfo command for file module1.ko-------------------
+
+spanpunelt13@spanpunelt13-VirtualBox:~/session1/mod_dep$ modinfo module1.ko
+filename:       /home/spanpunelt13/session1/mod_dep/module1.ko
+description:    Module Dependency
+version:        DRIVER_MODULE_VERSION
+author:         DRIVER_MODULE_AUTHOR
+license:        GPL_LICENSE
+srcversion:     80B290FBDFA365323EB41E6
+depends:        
+retpoline:      Y
+name:           module1
+vermagic:       4.15.0-36-generic SMP mod_unload 686 
+
+//-------------Output of modinfo command for file module2.ko------------------
+
+spanpunelt13@spanpunelt13-VirtualBox:~/session1/mod_dep$ modinfo module2.ko
+filename:       /home/spanpunelt13/session1/mod_dep/module2.ko
+description:    Module Dependency
+version:        DRIVER_MODULE_VERSION
+author:         DRIVER_MODULE_AUTHOR
+license:        GPL_LICENSE
+srcversion:     F404C69F33101010FE8CB4D
+depends:        module1
+retpoline:      Y
+name:           module2
+vermagic:       4.15.0-36-generic SMP mod_unload 686 
+
+//--------------Output of loading dependent module module2.ko before loading 
+the independent module module1.ko-----------------
+
+spanpunelt13@spanpunelt13-VirtualBox:~/session1/mod_dep$ sudo insmod module2.ko
+[sudo] password for spanpunelt13: 
+insmod: ERROR: could not insert module module2.ko: Unknown symbol in module
+
+//---------Output of file when inserting module1.ko first and then the independent module2.ko --------------------------------------------------------
+
+spanpunelt13@spanpunelt13-VirtualBox:~/session1/mod_dep$ sudo insmod module1.ko
+[sudo] password for spanpunelt13: 
+spanpunelt13@spanpunelt13-VirtualBox:~/session1/mod_dep$ sudo insmod module2.ko
+
+//-------------------Output when removing a driver module which is used by another driver module--------------------------------------------------------------
+
+spanpunelt13@spanpunelt13-VirtualBox:~/session1/mod_dep$ sudo rmmod module1.ko
+rmmod: ERROR: Module module1 is in use by: module2
+
+//-------------------Output of list modules utility-----------------------------
+
+spanpunelt13@spanpunelt13-VirtualBox:~/session1/mod_dep$ lsmod | head -10
+Module                  Size  Used by
+module2                16384  0
+module1                16384  1 module2
+intel_powerclamp       16384  0
+crc32_pclmul           16384  0
+pcbc                   16384  0
+aesni_intel            20480  0
+aes_i586               20480  1 aesni_intel
+crypto_simd            16384  1 aesni_intel
+cryptd                 24576  1 crypto_simd
+
+//------------------Module.symvers file shows the symbols which are exported------------------------------------
+
+spanpunelt13@spanpunelt13-VirtualBox:~/session1/mod_dep$ cat Module.symvers
+0x00000000	print_hello	/home/spanpunelt13/session1/mod_dep/module1	EXPORT_SYMBOL
+0x00000000	add_two_numbers	/home/spanpunelt13/session1/mod_dep/module1	EXPORT_SYMBOL
+0x00000000	GLOBAL_VARIABLE	/home/spanpunelt13/session1/mod_dep/module1	EXPORT_SYMBOL
+
+//------------------------To know the exported symbols--------------------------------------
+
+spanpunelt13@spanpunelt13-VirtualBox:~/session1/mod_dep$ cat /proc/kallsyms > /tmp/1
+spanpunelt13@spanpunelt13-VirtualBox:~/session1/mod_dep$ sudo insmod module1.ko
+spanpunelt13@spanpunelt13-VirtualBox:~/session1/mod_dep$ cat /proc/kallsyms > /tmp/2
+spanpunelt13@spanpunelt13-VirtualBox:~/session1/mod_dep$ diff /tmp/1 /tmp/2
+94996a94997,95010
+> 00000000 t init_func	[module1]
+> 00000000 t exit_func	[module1]
+> 00000000 r __ksymtab_add_two_numbers	[module1]
+> 00000000 r __kstrtab_add_two_numbers	[module1]
+> 00000000 r __ksymtab_print_hello	[module1]
+> 00000000 r __kstrtab_print_hello	[module1]
+> 00000000 r __ksymtab_GLOBAL_VARIABLE	[module1]
+> 00000000 r __kstrtab_GLOBAL_VARIABLE	[module1]
+> 00000000 d __this_module	[module1]
+> 00000000 t cleanup_module	[module1]
+> 00000000 t init_module	[module1]
+> 00000000 T add_two_numbers	[module1]
+> 00000000 D GLOBAL_VARIABLE	[module1]
+> 00000000 T print_hello	[module1]
+
+
+*********************Note for the above OUTPUT******************************
+
+The UPPERCASE T says that function are exported and lowercase t says not exported
+
+*****************************************************************************
+
+//--------------Output of the insmod command and messages displayed on log screen-------------------------
+
+Oct  9 10:36:38 spanpunelt13-VirtualBox kernel: [ 5922.363396] Inside the init_func of module1.c file
+Oct  9 10:37:24 spanpunelt13-VirtualBox kernel: [ 5967.733016] Inside the init_func module2
+Oct  9 10:37:24 spanpunelt13-VirtualBox kernel: [ 5967.733018] Hello
+Oct  9 10:37:24 spanpunelt13-VirtualBox kernel: [ 5967.733018] Hello
+Oct  9 10:37:24 spanpunelt13-VirtualBox kernel: [ 5967.733018] Hello
+Oct  9 10:37:24 spanpunelt13-VirtualBox kernel: [ 5967.733019] Hello
+Oct  9 10:37:24 spanpunelt13-VirtualBox kernel: [ 5967.733019] Hello
+Oct  9 10:37:24 spanpunelt13-VirtualBox kernel: [ 5967.733019] Hello
+Oct  9 10:37:24 spanpunelt13-VirtualBox kernel: [ 5967.733019] Hello
+Oct  9 10:37:24 spanpunelt13-VirtualBox kernel: [ 5967.733020] Hello
+Oct  9 10:37:24 spanpunelt13-VirtualBox kernel: [ 5967.733020] Hello
+Oct  9 10:37:24 spanpunelt13-VirtualBox kernel: [ 5967.733020] Hello
+Oct  9 10:37:24 spanpunelt13-VirtualBox kernel: [ 5967.733021] sum of the numbers 178
+Oct  9 10:37:24 spanpunelt13-VirtualBox kernel: [ 5967.733021] Value of Global Variable 1000
+Oct  9 10:37:47 spanpunelt13-VirtualBox kernel: [ 5991.273251] Inside the exit func module2
+Oct  9 10:37:57 spanpunelt13-VirtualBox kernel: [ 6001.268630] Inside the exit func of module1.c file
+
+//------------------------------------------------------------------------
+
+
+
+
+
+
